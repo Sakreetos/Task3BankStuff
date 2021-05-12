@@ -5,7 +5,8 @@ import java.util.*;
 
 public class Main {
 
-    private static final List<AccountInfo> backAccountsAfterTransaction = new ArrayList<AccountInfo>();
+    public static  final String localDir = System.getProperty("user.dir");
+    private static final List<AccountInfo> backAccountsAfterTransaction = new ArrayList<>();
     private  static  final Map<String, Integer> bankAccountsInfo = new TreeMap<>();
 
     public static void main(String[] args) throws IOException {
@@ -18,7 +19,7 @@ public class Main {
 
     public static void ConvertToTreeMap() throws IOException {
 
-        File sourceOfBankAccounts = new File("D:\\JavaProjects\\Task3BankStuff\\src\\com\\Task3BankStuff\\sourceFiles\\initMoney.txt");
+        File sourceOfBankAccounts = new File(localDir + "\\src\\com\\Task3BankStuff\\sourceFiles\\initMoney.txt");
         BufferedReader br = new BufferedReader(new FileReader(sourceOfBankAccounts));
 
         try {
@@ -37,7 +38,7 @@ public class Main {
 
     public static void ProcessTransaction() throws IOException {
 
-        File transactions = new File("D:\\JavaProjects\\Task3BankStuff\\src\\com\\Task3BankStuff\\sourceFiles\\transactions.txt");
+        File transactions = new File(localDir +"\\src\\com\\Task3BankStuff\\sourceFiles\\transactions.txt");
         BufferedReader br = new BufferedReader(new FileReader(transactions));
 
         try {
@@ -64,7 +65,7 @@ public class Main {
         for (Map.Entry<String, Integer> entry : bankAccountsInfo.entrySet()) {
             backAccountsAfterTransaction.add(new AccountInfo(entry.getKey(), entry.getValue()));
         }
-        Collections.sort(backAccountsAfterTransaction,new MySalaryComp());
+        backAccountsAfterTransaction.sort(new MySalaryComp());
     }
 
     public static void TransactionResultsToFile() {
@@ -85,8 +86,10 @@ public class Main {
     static class MySalaryComp implements Comparator<AccountInfo>{
         @Override
         public int compare(AccountInfo accountInfo, AccountInfo t1) {
-            if (accountInfo.getMoney()> t1.money){
+            if (accountInfo.getMoney() > t1.money){
                 return 1;
+            }else if(accountInfo.getMoney()== t1.money) {
+                return -0;
             }else return -1;
         }
     }
