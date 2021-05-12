@@ -65,7 +65,7 @@ public class Main {
         for (Map.Entry<String, Integer> entry : bankAccountsInfo.entrySet()) {
             backAccountsAfterTransaction.add(new AccountInfo(entry.getKey(), entry.getValue()));
         }
-        backAccountsAfterTransaction.sort(new MySalaryComp());
+        backAccountsAfterTransaction.sort(new MoneyComparator());
     }
 
     public static void TransactionResultsToFile() {
@@ -83,7 +83,7 @@ public class Main {
             }
     }
 
-    static class MySalaryComp implements Comparator<AccountInfo>{
+    static class MoneyComparator implements Comparator<AccountInfo>{
         @Override
         public int compare(AccountInfo accountInfo, AccountInfo t1) {
             if (accountInfo.getMoney() > t1.money){
