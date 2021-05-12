@@ -46,13 +46,15 @@ public class Main {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] array = line.split("\\|");
-               double transfer = Double.parseDouble(array[2]);
+
+                double transfer = Double.parseDouble(array[2]);
                 int moneyFrom = (int)(bankAccountsInfo.get(array[0]) - transfer);
                 int moneyTo = (int) (bankAccountsInfo.get(array[1]) + transfer);
+
                 bankAccountsInfo.put(array[0], moneyFrom);
                 bankAccountsInfo.put(array[1], moneyTo);
-                    }
 
+                    }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -72,28 +74,21 @@ public class Main {
         Collections.sort(backAccountsAfterTransaction);
 
             try {
+
                 FileWriter transactionResults = new FileWriter("D:\\JavaProjects\\Task3BankStuff\\src\\com\\Task3BankStuff\\sourceFiles\\result.txt");
                 transactionResults.flush();
+
                 for (AccountInfo info: backAccountsAfterTransaction) {
                     transactionResults.write("\n" + info.bankAccountId + "|" + info.money);
                 }
+
                 transactionResults.close();
                 System.out.println("Done");
+
             } catch (IOException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
     }
-
-//    static class MoneyComparator implements Comparator<AccountInfo>{
-//        @Override
-//        public int compare(AccountInfo accountInfo, AccountInfo t1) {
-//            if (accountInfo.getMoney() > t1.money){
-//                return 1;
-//            }else if(accountInfo.getMoney()== t1.money) {
-//                return -0;
-//            }else return -1;
-//        }
-//    }
 
 }
