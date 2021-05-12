@@ -2,24 +2,21 @@ package com.Task3BankStuff;
 
 import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class Main {
 
-    private static final List<AccountInfo> bankAccountsInfo = new ArrayList<AccountInfo>();
+    private static final List<AccountInfo> backAccountsAfterTransaction = new ArrayList<AccountInfo>();
+    private  static  final Map<String, Integer> bankAccountsInfo = new TreeMap<>();
 
     public static void main(String[] args) throws IOException {
 
-        ConvertToArrayList();
+        ConvertToTreeMap();
         ProcessTransaction();
-        Collections.sort(bankAccountsInfo,new MySalaryComp());
+        TreeMapToArrayList();
         TransactionResultsToFile();
     }
 
-    public static void ConvertToArrayList() throws IOException {
+    public static void ConvertToTreeMap() throws IOException {
 
         File sourceOfBankAccounts = new File("D:\\JavaProjects\\Task3BankStuff\\src\\com\\Task3BankStuff\\sourceFiles\\initMoney.txt");
         BufferedReader br = new BufferedReader(new FileReader(sourceOfBankAccounts));
@@ -29,7 +26,7 @@ public class Main {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] array = line.split("\\|");
-                Main.bankAccountsInfo.add(new AccountInfo(array[0], Integer.parseInt(array[1])));
+               bankAccountsInfo.put(array[0], Integer.parseInt(array[1]));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,22 +43,14 @@ public class Main {
         try {
             br = new BufferedReader(new FileReader(transactions));
             String line;
-            int transfer;
             while ((line = br.readLine()) != null) {
                 String[] array = line.split("\\|");
-                transfer =(int) Double.parseDouble(array[2]);
-
-                for (AccountInfo fromAccount: bankAccountsInfo){
-                    if (fromAccount.bankAccountId.equals(array[0])){
-                        fromAccount.money -= transfer;
-                        }
+               double transfer = Double.parseDouble(array[2]);
+                int moneyFrom = (int)(bankAccountsInfo.get(array[0]) - transfer);
+                int moneyTo = (int) (bankAccountsInfo.get(array[1]) + transfer);
+                bankAccountsInfo.put(array[0], moneyFrom);
+                bankAccountsInfo.put(array[1], moneyTo);
                     }
-                for (AccountInfo toAccount : bankAccountsInfo){
-                    if (toAccount.bankAccountId.equals(array[1])){
-                        toAccount.money += transfer;
-                    }
-                }
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,11 +59,19 @@ public class Main {
         }
     }
 
+    public static void TreeMapToArrayList(){
+
+        for (Map.Entry<String, Integer> entry : bankAccountsInfo.entrySet()) {
+            backAccountsAfterTransaction.add(new AccountInfo(entry.getKey(), entry.getValue()));
+        }
+        Collections.sort(backAccountsAfterTransaction,new MySalaryComp());
+    }
+
     public static void TransactionResultsToFile() {
             try {
                 FileWriter transactionResults = new FileWriter("D:\\JavaProjects\\Task3BankStuff\\src\\com\\Task3BankStuff\\sourceFiles\\result.txt");
                 transactionResults.flush();
-                for (AccountInfo info: bankAccountsInfo) {
+                for (AccountInfo info: backAccountsAfterTransaction) {
                     transactionResults.write("\n" + info.bankAccountId + "|" + info.money);
                 }
                 transactionResults.close();
