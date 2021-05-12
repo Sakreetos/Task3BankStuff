@@ -1,6 +1,6 @@
 package com.Task3BankStuff;
 
-public class AccountInfo{
+public class AccountInfo implements Comparable<AccountInfo>{
     public String bankAccountId;
     public int money;
 
@@ -26,7 +26,7 @@ public class AccountInfo{
     }
 
     @Override
-    public String toString() {
-        return "\n" + bankAccountId + "|" + money;
+    public int compareTo(AccountInfo m) {
+        return this.money- m.money;
     }
 }

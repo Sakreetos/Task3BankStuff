@@ -6,7 +6,7 @@ import java.util.*;
 public class Main {
 
     public static  final String localDir = System.getProperty("user.dir");
-    private static final List<AccountInfo> backAccountsAfterTransaction = new ArrayList<>();
+    private  static  final List<AccountInfo> backAccountsAfterTransaction = new ArrayList<>();
     private  static  final Map<String, Integer> bankAccountsInfo = new TreeMap<>();
 
     public static void main(String[] args) throws IOException {
@@ -65,10 +65,12 @@ public class Main {
         for (Map.Entry<String, Integer> entry : bankAccountsInfo.entrySet()) {
             backAccountsAfterTransaction.add(new AccountInfo(entry.getKey(), entry.getValue()));
         }
-        backAccountsAfterTransaction.sort(new MoneyComparator());
     }
 
     public static void TransactionResultsToFile() {
+
+        Collections.sort(backAccountsAfterTransaction);
+
             try {
                 FileWriter transactionResults = new FileWriter("D:\\JavaProjects\\Task3BankStuff\\src\\com\\Task3BankStuff\\sourceFiles\\result.txt");
                 transactionResults.flush();
@@ -83,15 +85,15 @@ public class Main {
             }
     }
 
-    static class MoneyComparator implements Comparator<AccountInfo>{
-        @Override
-        public int compare(AccountInfo accountInfo, AccountInfo t1) {
-            if (accountInfo.getMoney() > t1.money){
-                return 1;
-            }else if(accountInfo.getMoney()== t1.money) {
-                return -0;
-            }else return -1;
-        }
-    }
+//    static class MoneyComparator implements Comparator<AccountInfo>{
+//        @Override
+//        public int compare(AccountInfo accountInfo, AccountInfo t1) {
+//            if (accountInfo.getMoney() > t1.money){
+//                return 1;
+//            }else if(accountInfo.getMoney()== t1.money) {
+//                return -0;
+//            }else return -1;
+//        }
+//    }
 
 }
